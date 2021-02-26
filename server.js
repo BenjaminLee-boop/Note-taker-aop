@@ -27,11 +27,12 @@ app.delete("/api/notes/:id", (req, res) => {
   console.log(req.params.id);
   let rawdata = fs.readFileSync("./db/db.json");
   let jsonObject = JSON.parse(rawdata);
-  jsonObject = jsonObject.filter(function (item) {
-    if (item.id === req.params.id) {
-      jsonObject.pop(item);
+  for (let x = 0; x < jsonObject.length; x++) {
+    console.log(jsonObject[x].id);
+    if (jsonObject[x].id === req.params.id) {
+      jsonObject.splice(x, 1);
     }
-  });
+  }
   let c = JSON.stringify(jsonObject);
   fs.writeFile("./db/db.json", c, function (err, result) {
     if (err) console.log("error", err);
@@ -47,11 +48,9 @@ app.post("/api/notes", (req, res) => {
   };
   let rawdata = fs.readFileSync("./db/db.json");
   let jsonObject = JSON.parse(rawdata);
-  console.log(jsonObject);
   jsonObject.push(dataToWrite);
-  console.log(jsonObject);
   let c = JSON.stringify(jsonObject);
-
+  console.log(jsonObject);
   fs.writeFile("./db/db.json", c, function (err, result) {
     if (err) console.log("error", err);
   });
